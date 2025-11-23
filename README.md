@@ -8,6 +8,7 @@ Conexao Escola é um aplicativo Android desenvolvido para auxiliar os alunos ou 
 *   **Acompanhamento de Faltas:** Monitore suas faltas em cada disciplina e veja um resumo completo.
 *   **Perfil do Usuário:** Gerencie suas informações de perfil.
 *   **Design Moderno:** Interface de usuário limpa e intuitiva construída com Jetpack Compose.
+*   **Modo Noturno/Claro:** Interface fica no modo noturno ou claro de acordo com dispositivo do usuario. 
 
 ## 🚀 Tecnologias Utilizadas
 
