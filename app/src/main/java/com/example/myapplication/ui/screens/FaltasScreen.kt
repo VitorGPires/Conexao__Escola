@@ -29,7 +29,7 @@ import com.example.myapplication.ui.composables.MainHeader
 import com.example.myapplication.ui.theme.MyApplicationTheme
 import com.example.myapplication.ui.viewmodels.UserViewModel
 
-data class AbsenceDetails(val subject: String, val absences: Int, val limit: Int, val icon: ImageVector)
+data class AbsenceDetails(val subject: String, val absences: Int, val limit: Int, val icon: ImageVector, val color: Color)
 
 @Composable
 fun FaltasScreen(
@@ -38,16 +38,16 @@ fun FaltasScreen(
     userViewModel: UserViewModel = viewModel()
 ) {
     val absenceData = listOf(
-        AbsenceDetails("Matemática", 5, 20, Icons.Default.Calculate),
-        AbsenceDetails("Português", 2, 20, Icons.Default.Book),
-        AbsenceDetails("Ciências", 7, 20, Icons.Default.Science),
-        AbsenceDetails("História", 1, 20, Icons.Default.History)
+        AbsenceDetails("Matemática", 5, 20, Icons.Default.Calculate, Color(0xFF6A1B9A)),
+        AbsenceDetails("Português", 2, 20, Icons.Default.Book, Color(0xFF0277BD)),
+        AbsenceDetails("Ciências", 7, 20, Icons.Default.Science, Color(0xFF2E7D32)),
+        AbsenceDetails("História", 1, 20, Icons.Default.History, Color(0xFFD84315))
     )
 
     Column(
         modifier = modifier
             .fillMaxSize()
-            .background(Color(0xFFF0F4F8))
+            .background(MaterialTheme.colorScheme.background)
     ) {
         MainHeader(navController = navController, userViewModel = userViewModel)
 
@@ -68,7 +68,6 @@ fun FaltasScreen(
     }
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun AbsenceSummary() {
     Row(
@@ -77,15 +76,15 @@ fun AbsenceSummary() {
             .padding(16.dp),
         horizontalArrangement = Arrangement.SpaceAround
     ) {
-        SummaryItem("Total de Faltas", "15", Icons.Default.ArrowDownward, Color(0xFFD32F2F))
-        SummaryItem("Frequência", "95%", Icons.Default.ArrowUpward, Color(0xFF2E7D32))
+        SummaryItem("Total de Faltas", "15", Icons.Default.ArrowDownward, MaterialTheme.colorScheme.error)
+        SummaryItem("Frequência", "95%", Icons.Default.ArrowUpward, MaterialTheme.colorScheme.primary)
     }
 }
 
 @Composable
 fun SummaryItem(title: String, value: String, icon: ImageVector, color: Color) {
     Column(horizontalAlignment = Alignment.CenterHorizontally) {
-        Text(text = title, fontSize = 14.sp, color = Color.Gray)
+        Text(text = title, fontSize = 14.sp, color = MaterialTheme.colorScheme.onSurfaceVariant)
         Spacer(modifier = Modifier.height(4.dp))
         Row(verticalAlignment = Alignment.CenterVertically) {
             Icon(imageVector = icon, contentDescription = null, tint = color)
@@ -101,20 +100,32 @@ fun AbsenceCard(details: AbsenceDetails) {
     Card(
         modifier = Modifier.fillMaxWidth(),
         shape = RoundedCornerShape(12.dp),
-        colors = CardDefaults.cardColors(containerColor = Color.White),
+        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface),
         elevation = CardDefaults.cardElevation(2.dp)
     ) {
         Row(
             modifier = Modifier.padding(16.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
-            Icon(imageVector = details.icon, contentDescription = null, tint = Color(0xFF4A90E2), modifier = Modifier.size(32.dp))
+            Box(
+                modifier = Modifier
+                    .size(48.dp)
+                    .background(color = details.color.copy(alpha = 0.1f), shape = RoundedCornerShape(8.dp)),
+                contentAlignment = Alignment.Center
+            ) {
+                Icon(
+                    imageVector = details.icon,
+                    contentDescription = null,
+                    tint = details.color,
+                    modifier = Modifier.size(28.dp)
+                )
+            }
             Spacer(modifier = Modifier.width(16.dp))
             Column(modifier = Modifier.weight(1f)) {
                 Text(text = details.subject, fontWeight = FontWeight.Bold, fontSize = 18.sp)
-                Text(text = "Limite de ${details.limit} faltas", fontSize = 12.sp, color = Color.Gray)
+                Text(text = "Limite de ${details.limit} faltas", fontSize = 12.sp, color = MaterialTheme.colorScheme.onSurfaceVariant)
             }
-            Text(text = "${details.absences}", fontWeight = FontWeight.Bold, fontSize = 24.sp, color = if (details.absences > details.limit * 0.75) Color(0xFFD32F2F) else Color.DarkGray)
+            Text(text = "${details.absences}", fontWeight = FontWeight.Bold, fontSize = 24.sp, color = if (details.absences > details.limit * 0.75) MaterialTheme.colorScheme.error else MaterialTheme.colorScheme.onSurface)
         }
     }
 }

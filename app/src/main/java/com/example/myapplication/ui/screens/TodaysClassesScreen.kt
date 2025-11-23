@@ -48,7 +48,7 @@ fun TodaysClassesScreen(
     Column(
         modifier = modifier
             .fillMaxSize()
-            .background(Color(0xFFF0F4F8))
+            .background(MaterialTheme.colorScheme.background)
     ) {
         MainHeader(navController = navController, userViewModel = userViewModel)
 
@@ -60,7 +60,7 @@ fun TodaysClassesScreen(
             verticalAlignment = Alignment.CenterVertically
         ) {
             Text("Aulas de Hoje", style = MaterialTheme.typography.headlineSmall, fontWeight = FontWeight.Bold)
-            Text("15/11/2024", fontSize = 14.sp, color = Color.Gray)
+            Text("15/11/2024", fontSize = 14.sp, color = MaterialTheme.colorScheme.onSurfaceVariant)
         }
 
         LazyColumn(
@@ -80,7 +80,7 @@ fun ClassDetailsCard(classDetails: ClassDetails) {
     Card(
         modifier = Modifier.fillMaxWidth(),
         shape = RoundedCornerShape(12.dp),
-        colors = CardDefaults.cardColors(containerColor = Color.White),
+        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface),
         elevation = CardDefaults.cardElevation(2.dp)
     ) {
         Row(
@@ -91,16 +91,16 @@ fun ClassDetailsCard(classDetails: ClassDetails) {
                 imageVector = classDetails.icon,
                 contentDescription = classDetails.subject,
                 modifier = Modifier.size(32.dp),
-                tint = Color(0xFF4A90E2)
+                tint = MaterialTheme.colorScheme.primary
             )
             Spacer(modifier = Modifier.width(16.dp))
             Column(modifier = Modifier.weight(1f)) {
                 Text(text = classDetails.subject, fontWeight = FontWeight.Bold, fontSize = 18.sp)
-                Text(text = classDetails.teacher, fontSize = 14.sp, color = Color.Gray)
+                Text(text = classDetails.teacher, fontSize = 14.sp, color = MaterialTheme.colorScheme.onSurfaceVariant)
             }
             Column(horizontalAlignment = Alignment.End) {
                 Text(text = classDetails.time, fontWeight = FontWeight.Bold, fontSize = 16.sp)
-                Text(text = classDetails.room, fontSize = 14.sp, color = Color.Gray)
+                Text(text = classDetails.room, fontSize = 14.sp, color = MaterialTheme.colorScheme.onSurfaceVariant)
             }
         }
     }

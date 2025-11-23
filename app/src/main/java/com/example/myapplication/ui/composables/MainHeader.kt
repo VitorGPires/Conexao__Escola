@@ -6,6 +6,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -27,24 +28,24 @@ fun MainHeader(
     Row(
         modifier = Modifier
             .fillMaxWidth()
-            .background(Color(0xFFE3F2FD))
+            .background(MaterialTheme.colorScheme.surfaceVariant)
             .padding(16.dp),
         verticalAlignment = Alignment.CenterVertically
     ) {
         IconButton(onClick = { navController.navigateUp() }) {
-            Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "Voltar", tint = Color(0xFF4A90E2))
+            Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "Voltar")
         }
         Spacer(modifier = Modifier.width(8.dp))
         if (userData != null) {
             Column {
                 Text(userData.nome, fontWeight = FontWeight.Bold, fontSize = 20.sp)
-                Text("${userData.turma} - Matrícula: ${userData.matricula}", fontSize = 14.sp, color = Color.Gray)
-                Text("Período: ${userData.periodo}", fontSize = 14.sp, color = Color.Gray)
+                Text("${userData.turma} - Matrícula: ${userData.matricula}", fontSize = 14.sp, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                Text("Período: ${userData.periodo}", fontSize = 14.sp, color = MaterialTheme.colorScheme.onSurfaceVariant)
             }
         } else {
             Column {
                 Text("Carregando...", fontWeight = FontWeight.Bold, fontSize = 20.sp)
-                Text("Carregando...", fontSize = 14.sp, color = Color.Gray)
+                Text("Carregando...", fontSize = 14.sp, color = MaterialTheme.colorScheme.onSurfaceVariant)
             }
         }
     }

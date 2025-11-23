@@ -47,7 +47,7 @@ fun TestDatesScreen(
     Column(
         modifier = modifier
             .fillMaxSize()
-            .background(Color(0xFFF0F4F8))
+            .background(MaterialTheme.colorScheme.background)
     ) {
         MainHeader(navController = navController, userViewModel = userViewModel)
 
@@ -75,7 +75,7 @@ fun TestCard(test: TestInfo) {
     Card(
         modifier = Modifier.fillMaxWidth(),
         shape = RoundedCornerShape(12.dp),
-        colors = CardDefaults.cardColors(containerColor = Color.White),
+        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface),
         elevation = CardDefaults.cardElevation(2.dp)
     ) {
         Row(modifier = Modifier.padding(16.dp), verticalAlignment = Alignment.CenterVertically) {
@@ -83,22 +83,22 @@ fun TestCard(test: TestInfo) {
                 modifier = Modifier
                     .size(40.dp)
                     .clip(CircleShape)
-                    .background(Color(0xFFE3F2FD)),
+                    .background(MaterialTheme.colorScheme.primaryContainer),
                 contentAlignment = Alignment.Center
             ) {
                 Icon(
                     imageVector = test.icon,
                     contentDescription = null,
-                    tint = Color(0xFF4A90E2),
+                    tint = MaterialTheme.colorScheme.onPrimaryContainer,
                     modifier = Modifier.size(24.dp)
                 )
             }
             Spacer(modifier = Modifier.width(16.dp))
             Column(modifier = Modifier.weight(1f)) {
                 Text(test.subject, fontWeight = FontWeight.Bold, fontSize = 18.sp)
-                Text(test.content, fontSize = 14.sp, color = Color.Gray)
+                Text(test.content, fontSize = 14.sp, color = MaterialTheme.colorScheme.onSurfaceVariant)
             }
-            Text(test.date, fontWeight = FontWeight.Bold, fontSize = 16.sp, color = Color.DarkGray)
+            Text(test.date, fontWeight = FontWeight.Bold, fontSize = 16.sp, color = MaterialTheme.colorScheme.onSurface)
         }
     }
 }

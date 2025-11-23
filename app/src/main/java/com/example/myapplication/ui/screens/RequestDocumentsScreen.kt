@@ -32,7 +32,7 @@ fun RequestDocumentsScreen(
     Column(
         modifier = modifier
             .fillMaxSize()
-            .background(Color(0xFFF0F4F8))
+            .background(MaterialTheme.colorScheme.background)
     ) {
         MainHeader(navController = navController, userViewModel = userViewModel)
 
@@ -95,7 +95,7 @@ fun RequestDocumentsScreen(
                     .fillMaxWidth()
                     .height(50.dp),
                 shape = RoundedCornerShape(12.dp),
-                colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF4A90E2))
+                colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.primary)
             ) {
                 Text("Confirmar Solicitação", style = MaterialTheme.typography.bodyLarge)
             }

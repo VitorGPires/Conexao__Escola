@@ -47,7 +47,7 @@ fun MensagensScreen(
     Column(
         modifier = modifier
             .fillMaxSize()
-            .background(Color(0xFFF0F4F8))
+            .background(MaterialTheme.colorScheme.background)
     ) {
         MainHeader(navController = navController, userViewModel = userViewModel)
 
@@ -75,7 +75,7 @@ fun MessageCard(message: Message) {
     Card(
         modifier = Modifier.fillMaxWidth(),
         shape = RoundedCornerShape(12.dp),
-        colors = CardDefaults.cardColors(containerColor = if (message.read) Color(0xFFF5F5F5) else Color.White),
+        colors = CardDefaults.cardColors(containerColor = if (message.read) MaterialTheme.colorScheme.surfaceVariant else MaterialTheme.colorScheme.surface),
         elevation = CardDefaults.cardElevation(if (message.read) 0.dp else 2.dp)
     ) {
         Row(modifier = Modifier.padding(16.dp), verticalAlignment = Alignment.CenterVertically) {
@@ -83,24 +83,24 @@ fun MessageCard(message: Message) {
                 modifier = Modifier
                     .size(40.dp)
                     .clip(CircleShape)
-                    .background(if (message.read) Color.LightGray else Color(0xFF4A90E2)),
+                    .background(if (message.read) MaterialTheme.colorScheme.surfaceVariant else MaterialTheme.colorScheme.primary),
                 contentAlignment = Alignment.Center
             ) {
-                Icon(message.icon, contentDescription = null, tint = Color.White)
+                Icon(message.icon, contentDescription = null, tint = if (message.read) MaterialTheme.colorScheme.onSurfaceVariant else MaterialTheme.colorScheme.onPrimary)
             }
             Spacer(modifier = Modifier.width(16.dp))
             Column(modifier = Modifier.weight(1f)) {
                 Text(message.title, fontWeight = if (message.read) FontWeight.Normal else FontWeight.Bold, fontSize = 16.sp)
-                Text(message.sender, fontSize = 14.sp, color = Color.Gray)
+                Text(message.sender, fontSize = 14.sp, color = MaterialTheme.colorScheme.onSurfaceVariant)
             }
             Column(horizontalAlignment = Alignment.End) {
-                Text(message.time, fontSize = 12.sp, color = Color.Gray)
+                Text(message.time, fontSize = 12.sp, color = MaterialTheme.colorScheme.onSurfaceVariant)
                 if (!message.read) {
                     Spacer(modifier = Modifier.height(4.dp))
-                    Box(modifier = Modifier.size(8.dp).clip(CircleShape).background(Color(0xFF4A90E2)))
+                    Box(modifier = Modifier.size(8.dp).clip(CircleShape).background(MaterialTheme.colorScheme.primary))
                 }
             }
-            Icon(Icons.Default.ArrowForwardIos, contentDescription = null, tint = Color.Gray, modifier = Modifier.size(16.dp).padding(start = 8.dp))
+            Icon(Icons.Default.ArrowForwardIos, contentDescription = null, tint = MaterialTheme.colorScheme.onSurfaceVariant, modifier = Modifier.size(16.dp).padding(start = 8.dp))
         }
     }
 }

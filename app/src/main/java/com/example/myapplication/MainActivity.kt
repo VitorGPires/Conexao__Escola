@@ -43,7 +43,7 @@ import com.example.myapplication.ui.viewmodels.UserViewModel
 // --- Data Classes (Modelos de Dados) ---
 data class ClassInfo(val subject: String, val teacher: String, val time: String, val room: String, val icon: ImageVector)
 data class NotificationInfo(val title: String, val description: String, val time: String, val icon: ImageVector, val color: Color)
-data class QuickAccessItem(val title: String, val subtitle: String, val icon: ImageVector, val route: String)
+data class QuickAccessItem(val title: String, val subtitle: String, val icon: ImageVector, val route: String, val color: Color)
 
 // --- Estrutura da Navegação ---
 sealed class AppScreen(val route: String) {
@@ -209,12 +209,12 @@ fun SummaryCard(title: String, value: String, icon: ImageVector, modifier: Modif
 @Composable
 fun QuickAccessGrid(navController: NavController) {
     val items = listOf(
-        QuickAccessItem("Notas", "Consultar boletim", Icons.Default.Star, BottomNavItem.Grades.route),
-        QuickAccessItem("Faltas", "Ver frequência", Icons.Default.PersonOff, "absences"),
-        QuickAccessItem("Provas", "Calendário de avaliações", Icons.Default.Event, "tests"),
-        QuickAccessItem("Aulas", "Horário do dia", Icons.Default.Book, "classes"),
-        QuickAccessItem("Documentos", "Solicitar documentos", Icons.Default.Description, "documents"),
-        QuickAccessItem("Mensagens", "Comunicados", Icons.Default.Mail, "messages")
+        QuickAccessItem("Notas", "Consultar boletim", Icons.Default.Star, BottomNavItem.Grades.route, Color(0xFF4A90E2)),
+        QuickAccessItem("Faltas", "Ver frequência", Icons.Default.PersonOff, "absences", Color(0xFFD32F2F)),
+        QuickAccessItem("Provas", "Calendário de avaliações", Icons.Default.Event, "tests", Color(0xFF3F51B5)),
+        QuickAccessItem("Aulas", "Horário do dia", Icons.Default.Book, "classes", Color(0xFF009688)),
+        QuickAccessItem("Documentos", "Solicitar documentos", Icons.Default.Description, "documents", Color(0xFFFFA000)),
+        QuickAccessItem("Mensagens", "Comunicados", Icons.Default.Mail, "messages", Color(0xFF8E24AA))
     )
     Column {
         Text("Acesso Rápido", fontSize = 20.sp, fontWeight = FontWeight.Bold, modifier = Modifier.padding(bottom = 16.dp))
@@ -229,8 +229,8 @@ fun QuickAccessGrid(navController: NavController) {
 fun QuickAccessCard(item: QuickAccessItem, onClick: () -> Unit) {
     Card(Modifier.clickable(onClick = onClick), shape = RoundedCornerShape(12.dp), colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface), elevation = CardDefaults.cardElevation(2.dp)) {
         Column(modifier = Modifier.padding(16.dp)) {
-            Box(modifier = Modifier.clip(RoundedCornerShape(8.dp)).background(MaterialTheme.colorScheme.primaryContainer).padding(8.dp)) {
-                Icon(item.icon, item.title, tint = MaterialTheme.colorScheme.onPrimaryContainer, modifier = Modifier.size(24.dp))
+            Box(modifier = Modifier.clip(RoundedCornerShape(8.dp)).background(item.color.copy(alpha = 0.1f)).padding(8.dp)) {
+                Icon(item.icon, item.title, tint = item.color, modifier = Modifier.size(24.dp))
             }
             Spacer(Modifier.height(8.dp))
             Text(item.title, fontWeight = FontWeight.Bold, fontSize = 16.sp)
