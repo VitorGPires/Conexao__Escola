@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "909578238802",
+    "project_id": "handsmobile-a33e2",
+    "storage_bucket": "handsmobile-a33e2.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:909578238802:android:3b9a41be78e65667ecd88b",
+        "android_client_info": {
+          "package_name": "com.example.myapplication"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDpRBD_La5xb43VcSYbS_kVl9vuIKpoyMU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
