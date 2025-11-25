@@ -3,12 +3,18 @@ package com.example.myapplication.ui.auth
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.KeyboardActions
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.focus.FocusRequester
+import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -23,7 +29,7 @@ import kotlinx.coroutines.tasks.await
 
 @Composable
 fun LoginScreen(
-    onLoginSuccess: () -> Unit, 
+    onLoginSuccess: () -> Unit,
     onNavigateToRegister: () -> Unit,
     userViewModel: UserViewModel = viewModel()
 ) {
@@ -34,6 +40,51 @@ fun LoginScreen(
     val coroutineScope = rememberCoroutineScope()
     val auth = FirebaseAuth.getInstance()
     val firestore = FirebaseFirestore.getInstance()
+
+    val focusRequester = remember { FocusRequester() }
+    val focusManager = LocalFocusManager.current
+
+    val loginAction: () -> Unit = {
+        // 1. Limpeza dos dados (Remove espaços e quebras de linha acidentais)
+        val cleanEmail = email.trim()
+        val cleanPassword = password.trim()
+
+        if (cleanEmail.isNotBlank() && cleanPassword.isNotBlank()) {
+            isLoading = true
+            coroutineScope.launch {
+                try {
+                    // Usa as variáveis limpas para autenticar
+                    val authResult = auth.signInWithEmailAndPassword(cleanEmail, cleanPassword).await()
+                    val firebaseUser = authResult.user
+
+                    if (firebaseUser != null) {
+                        val userDoc = firestore.collection("users").document(firebaseUser.uid).get().await()
+                        if (userDoc != null && userDoc.exists()) {
+                            val userData = UserData(
+                                nome = userDoc.getString("nome") ?: "",
+                                email = userDoc.getString("email") ?: "",
+                                turma = userDoc.getString("turmas") ?: "",
+                                matricula = userDoc.getString("matricula") ?: "",
+                                periodo = userDoc.getString("periodo") ?: ""
+                            )
+                            userViewModel.loadUserData(userData)
+                            onLoginSuccess()
+                        } else {
+                            errorMessage = "Dados do usuário não encontrados."
+                        }
+                    } else {
+                        errorMessage = "Ocorreu um erro ao fazer login."
+                    }
+                } catch (e: Exception) {
+                    errorMessage = e.message ?: "Erro desconhecido."
+                } finally {
+                    isLoading = false
+                }
+            }
+        } else {
+            errorMessage = "Por favor, preencha todos os campos."
+        }
+    }
 
     Column(
         modifier = Modifier
@@ -56,7 +107,10 @@ fun LoginScreen(
             onValueChange = { email = it },
             label = { Text("Email") },
             modifier = Modifier.fillMaxWidth(),
-            shape = RoundedCornerShape(12.dp)
+            shape = RoundedCornerShape(12.dp),
+            singleLine = true, // <--- ADICIONE ISTO
+            keyboardOptions = KeyboardOptions(imeAction = ImeAction.Next),
+            keyboardActions = KeyboardActions(onNext = { focusRequester.requestFocus() })
         )
         Spacer(modifier = Modifier.height(16.dp))
 
@@ -64,11 +118,18 @@ fun LoginScreen(
             value = password,
             onValueChange = { password = it },
             label = { Text("Senha") },
-            modifier = Modifier.fillMaxWidth(),
+            modifier = Modifier
+                .fillMaxWidth()
+                .focusRequester(focusRequester),
             shape = RoundedCornerShape(12.dp),
-            visualTransformation = PasswordVisualTransformation()
+            visualTransformation = PasswordVisualTransformation(),
+            singleLine = true, // <--- ADICIONE ISTO
+            keyboardOptions = KeyboardOptions(imeAction = ImeAction.Done),
+            keyboardActions = KeyboardActions(onDone = {
+                focusManager.clearFocus()
+                loginAction()
+            })
         )
-        
         errorMessage?.let {
             Spacer(modifier = Modifier.height(8.dp))
             Text(it, color = MaterialTheme.colorScheme.error)
@@ -77,42 +138,7 @@ fun LoginScreen(
         Spacer(modifier = Modifier.height(32.dp))
 
         Button(
-            onClick = {
-                if (email.isNotBlank() && password.isNotBlank()) {
-                    isLoading = true
-                    coroutineScope.launch {
-                        try {
-                            val authResult = auth.signInWithEmailAndPassword(email, password).await()
-                            val firebaseUser = authResult.user
-
-                            if (firebaseUser != null) {
-                                val userDoc = firestore.collection("users").document(firebaseUser.uid).get().await()
-                                if (userDoc != null && userDoc.exists()) {
-                                    val userData = UserData(
-                                        nome = userDoc.getString("nome") ?: "",
-                                        email = userDoc.getString("email") ?: "",
-                                        turma = userDoc.getString("turmas") ?: "", // Correção: "turma" para "turmas"
-                                        matricula = userDoc.getString("matricula") ?: "",
-                                        periodo = userDoc.getString("periodo") ?: ""
-                                    )
-                                    userViewModel.loadUserData(userData)
-                                    onLoginSuccess()
-                                } else {
-                                    errorMessage = "Dados do usuário não encontrados."
-                                }
-                            } else {
-                                errorMessage = "Ocorreu um erro ao fazer login."
-                            }
-                        } catch (e: Exception) {
-                            errorMessage = e.message ?: "Erro desconhecido."
-                        } finally {
-                            isLoading = false
-                        }
-                    }
-                } else {
-                    errorMessage = "Por favor, preencha todos os campos."
-                }
-            },
+            onClick = loginAction,
             modifier = Modifier
                 .fillMaxWidth()
                 .height(50.dp),

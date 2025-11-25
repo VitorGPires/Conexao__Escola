@@ -4,6 +4,7 @@ plugins {
     // As aspas aqui são obrigatórias:
     id("com.google.gms.google-services")
     kotlin("plugin.serialization")
+    id("com.google.firebase.firebase-perf")
 }
 
 android {
@@ -60,6 +61,7 @@ dependencies {
     implementation(platform("com.google.firebase:firebase-bom:33.1.2"))
     implementation("com.google.firebase:firebase-auth-ktx")
     implementation("com.google.firebase:firebase-firestore-ktx")
+    implementation("com.google.firebase:firebase-perf")
 
     // ViewModel
     implementation("androidx.lifecycle:lifecycle-viewmodel-compose:2.8.3")
