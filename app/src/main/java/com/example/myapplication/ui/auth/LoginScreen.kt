@@ -38,9 +38,9 @@ fun LoginScreen(
     var isLoading by remember { mutableStateOf(false) }
     var errorMessage by remember { mutableStateOf<String?>(null) }
     val coroutineScope = rememberCoroutineScope()
-    val auth = FirebaseAuth.getInstance()
-    val firestore = FirebaseFirestore.getInstance()
-
+// O 'remember' garante que o getInstance só roda UMA vez quando a tela nasce
+    val auth = remember { FirebaseAuth.getInstance() }
+    val firestore = remember { FirebaseFirestore.getInstance() }
     val focusRequester = remember { FocusRequester() }
     val focusManager = LocalFocusManager.current
 
